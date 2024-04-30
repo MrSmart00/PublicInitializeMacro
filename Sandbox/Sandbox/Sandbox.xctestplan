@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "D1E57446-A5E3-43D0-85F2-A6B2DE231ABA",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Sandbox.xcodeproj",
+      "identifier" : "C4F3121E2BE0BA0E002E7817",
+      "name" : "Sandbox"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:..\/packages",
+        "identifier" : "PluginTests",
+        "name" : "PluginTests"
+      }
+    }
+  ],
+  "version" : 1
+}

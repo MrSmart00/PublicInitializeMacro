@@ -5,31 +5,46 @@
 //  Created by 日野森寛也 on 2024/04/30.
 //
 
+import SwiftSyntaxMacros
+import SwiftSyntaxMacrosTestSupport
 import XCTest
+
+#if canImport(Plugins)
+import Plugins
+#endif
 
 final class PublicInitializationTests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
+    func test_Macro_With_Struct() throws {
+        #if canImport(Plugins)
+        let macros = [
+            "Public": PublicInitialization.self,
+        ]
+        assertMacroExpansion(
+            """
+            @Public
+            public struct Hoge {
+                let index: Int
+                let text: String?
+            }
+            """,
+            expandedSource:
+            """
+            public struct Hoge {
+                let index: Int
+                let text: String?
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+                public init(
+                    index: Int,
+                    text: String?
+                ) {
+                    self.index = index
+                    self.text = text
+                }
+            }
+            """,
+            macros: macros
+        )
+        #endif
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
 }
