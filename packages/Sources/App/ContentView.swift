@@ -6,16 +6,21 @@
 //
 
 import SwiftUI
+import Entity
 
 public struct ContentView: View {
-    public init() { }
+    let entity: Entity
+    
+    public init() {
+        self.entity = .init(text: "Hoge", date: .now)
+    }
 
     public var body: some View {
         VStack {
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Text(entity.text)
         }
         .padding()
     }

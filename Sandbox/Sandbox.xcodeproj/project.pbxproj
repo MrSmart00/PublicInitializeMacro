@@ -14,6 +14,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C4DCE31B2BE0F58D001377CE /* Sandbox.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = Sandbox.xctestplan; path = /Users/hiroya/ghq/github.com/MrSmart00/PublicInitializeMacro/Sandbox/Sandbox/Sandbox.xctestplan; sourceTree = "<absolute>"; };
 		C4F3121F2BE0BA0E002E7817 /* Sandbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sandbox.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4F312222BE0BA0E002E7817 /* SandboxApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SandboxApp.swift; sourceTree = "<group>"; };
 		C4F312262BE0BA0F002E7817 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -60,6 +61,7 @@
 		C4F312212BE0BA0E002E7817 /* Sandbox */ = {
 			isa = PBXGroup;
 			children = (
+				C4DCE31B2BE0F58D001377CE /* Sandbox.xctestplan */,
 				C4F312222BE0BA0E002E7817 /* SandboxApp.swift */,
 				C4F312262BE0BA0F002E7817 /* Assets.xcassets */,
 				C4F312282BE0BA0F002E7817 /* Sandbox.entitlements */,
