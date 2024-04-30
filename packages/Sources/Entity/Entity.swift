@@ -10,6 +10,6 @@ import Macros
 
 @Public
 public struct Entity {
-    let text: String
+    public let text: String
     let date: Date
 }

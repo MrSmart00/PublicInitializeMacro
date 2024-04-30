@@ -24,14 +24,14 @@ final class PublicInitializationTests: XCTestCase {
             """
             @Public
             public struct Hoge {
-                let index: Int
+                public let index: Int
                 let text: String?
             }
             """,
             expandedSource:
             """
             public struct Hoge {
-                let index: Int
+                public let index: Int
                 let text: String?
 
                 public init(
