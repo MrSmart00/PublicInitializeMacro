@@ -2,6 +2,7 @@
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
+import CompilerPluginSupport
 
 let package = Package(
     name: "packages",
@@ -9,10 +10,34 @@ let package = Package(
     products: [
         .library(
             name: "packages",
-            targets: ["App"]),
+            targets: ["App"]
+        ),
+    ],
+    dependencies: [
+        .package(url: "https://github.com/apple/swift-syntax.git", from: "510.0.0"),
     ],
     targets: [
         .target(
-            name: "App"),
+            name: "App",
+            dependencies: ["Macros"]
+        ),
+        .target(
+            name: "Macros",
+            dependencies: ["Plugins"]
+        ),
+        .macro(
+            name: "Plugins",
+            dependencies: [
+                .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+                .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
+            ]
+        ),
+        .testTarget(
+            name: "PluginTests",
+            dependencies: [
+                "Plugins",
+                .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax")
+            ]
+        )
     ]
 )
