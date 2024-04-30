@@ -19,6 +19,10 @@ let package = Package(
     targets: [
         .target(
             name: "App",
+            dependencies: ["Entity"]
+        ),
+        .target(
+            name: "Entity",
             dependencies: ["Macros"]
         ),
         .target(
