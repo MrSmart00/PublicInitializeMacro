@@ -8,6 +8,7 @@
 import SwiftSyntax
 import SwiftSyntaxMacros
 import SwiftSyntaxBuilder
+import SwiftDiagnostics
 import SwiftCompilerPlugin
 
 public struct PublicInitialization: MemberMacro {
@@ -17,10 +18,22 @@ public struct PublicInitialization: MemberMacro {
         in context: some MacroExpansionContext
     ) throws -> [DeclSyntax] {
         guard declaration.modifiers.first(where: { $0.name.text.contains("public") }) != nil else {
-            fatalError()
+            context.diagnose(
+                .init(
+                    node: declaration,
+                    message: MacroDiagnostic.notPublic
+                )
+            )
+            return []
         }
         guard declaration.is(StructDeclSyntax.self) || declaration.is(ClassDeclSyntax.self) else {
-            fatalError()
+            context.diagnose(
+                .init(
+                    node: declaration,
+                    message: MacroDiagnostic.notStructOrClass
+                )
+            )
+            return []
         }
 
         let values = declaration
@@ -62,6 +75,30 @@ extension PublicInitialization {
             }
         }
         return nil
+    }
+}
+
+extension PublicInitialization {
+    enum MacroDiagnostic: DiagnosticMessage {
+        case notPublic
+        case notStructOrClass
+
+        var message: String {
+            switch self {
+            case .notPublic:
+                "This macro is for public accessors only"
+            case .notStructOrClass:
+                "This macro is for struct or class usage only"
+            }
+        }
+        
+        var diagnosticID: SwiftDiagnostics.MessageID {
+            .init(domain: "PublicInitialization", id: "\(self)")
+        }
+        
+        var severity: SwiftDiagnostics.DiagnosticSeverity {
+            .error
+        }
     }
 }
 
