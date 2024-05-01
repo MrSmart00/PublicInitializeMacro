@@ -48,6 +48,45 @@ final class PublicInitializationTests: XCTestCase {
         #endif
     }
     
+    func test_Macro_With_Struct_ComputedProperty() throws {
+        #if canImport(Plugins)
+        let macros = [
+            "PublicInit": PublicInitialization.self,
+        ]
+        assertMacroExpansion(
+            """
+            @PublicInit
+            public struct Hoge {
+                public let index: Int
+                let text: String?
+                let computedProperty: Bool {
+                    true
+                }
+            }
+            """,
+            expandedSource:
+            """
+            public struct Hoge {
+                public let index: Int
+                let text: String?
+                let computedProperty: Bool {
+                    true
+                }
+
+                public init(
+                    index: Int,
+                    text: String?
+                ) {
+                    self.index = index
+                    self.text = text
+                }
+            }
+            """,
+            macros: macros
+        )
+        #endif
+    }
+
     func test_Macro_With_Class() throws {
         #if canImport(Plugins)
         let macros = [

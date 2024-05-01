@@ -41,7 +41,13 @@ public struct PublicInitialization: MemberMacro {
             .members
             .compactMap(parse(_:))
         let parameters = values.map { $0.parameter }.joined(separator: ",\n")
-        let initBody = values.map { CodeBlockItemListSyntax.Element("\(raw: $0.body) ") }
+        let initBody = values.enumerated().map { index, value in
+            if index == 0 {
+                return CodeBlockItemListSyntax.Element("\(raw: value.body)")
+            } else {
+                return CodeBlockItemListSyntax.Element("\n\(raw: value.body)")
+            }
+        }
 
         let initDeclSyntax = try InitializerDeclSyntax(
             SyntaxNodeString(
@@ -64,17 +70,21 @@ extension PublicInitialization {
         if let syntax = item.decl.as(VariableDeclSyntax.self),
            let pattern = syntax.bindings.first,
            let identifier = pattern.pattern.as(IdentifierPatternSyntax.self)?.identifier,
-           let type = pattern.typeAnnotation?.type {
-            let isComputedProperty = (pattern.accessorBlock != nil) == true
-            let isUsingAccessors = (pattern.accessorBlock != nil) == true
-            if !isComputedProperty, !isUsingAccessors {
-                return .init(
-                    parameter: "\(identifier): \(type)",
-                    body: "self.\(identifier) = \(identifier)"
-                )
-            }
+           let type = pattern.typeAnnotation?.type,
+           !checkAccessors(pattern)
+        {
+            return .init(
+                parameter: "\(identifier): \(type)",
+                body: "self.\(identifier) = \(identifier)"
+            )
         }
         return nil
+    }
+    
+    static func checkAccessors(_ pattern: PatternBindingSyntax) -> Bool {
+        let computedPropertyBlock = CodeBlockItemListSyntax(pattern.accessorBlock?.accessors)
+        let accessorBlock = AccessorBlockSyntax(pattern.accessorBlock)
+        return computedPropertyBlock != nil && accessorBlock != nil
     }
 }
 
