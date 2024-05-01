@@ -29,9 +29,9 @@ This is a sample project that adds a macro for generating constructors for publi
 │   │   ├── Entity
 │   │   │   └── Entity.swift
 │   │   ├── Macros
-│   │   │   └── Difinitions.swift
+│   │   │   └── Difinitions.swift  < Macro's difinition file
 │   │   └── Plugins
-│   │       └── PublicInitialization.swift
+│   │       └── PublicInitialization.swift  < Macro's implementation file
 │   └── Tests
 │       └── PluginTests
 │           └── PublicInitializationTests.swift
