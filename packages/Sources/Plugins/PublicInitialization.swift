@@ -70,17 +70,35 @@ extension PublicInitialization {
         if let syntax = item.decl.as(VariableDeclSyntax.self),
            let pattern = syntax.bindings.first,
            let identifier = pattern.pattern.as(IdentifierPatternSyntax.self)?.identifier,
-           let type = pattern.typeAnnotation?.type,
+           let type = pattern.typeAnnotation,
            !checkAccessors(pattern)
         {
+            let parameter: String = {
+                if checkSendable(type) {
+                    return "\(identifier): @escaping \(type.type)"
+                } else {
+                    return "\(identifier): \(type.type)"
+                }
+            }()
             return .init(
-                parameter: "\(identifier): \(type)",
+                parameter: parameter,
                 body: "self.\(identifier) = \(identifier)"
             )
         }
         return nil
     }
-    
+
+    static func checkSendable(_ type: TypeAnnotationSyntax) -> Bool {
+        if let attributedType = type.type.as(AttributedTypeSyntax.self),
+           let attributedSyntax = attributedType.attributes.first?.as(AttributeSyntax.self),
+           let identifier = attributedSyntax.attributeName.as(IdentifierTypeSyntax.self),
+           identifier.name.text == "Sendable"
+        {
+            return true
+        }
+        return false
+    }
+
     static func checkAccessors(_ pattern: PatternBindingSyntax) -> Bool {
         let computedPropertyBlock = CodeBlockItemListSyntax(pattern.accessorBlock?.accessors)
         let accessorBlock = AccessorBlockSyntax(pattern.accessorBlock)
