@@ -8,7 +8,7 @@
 import Foundation
 import Macros
 
-@Public
+@PublicInit
 public struct Entity {
     public let text: String
     let date: Date
