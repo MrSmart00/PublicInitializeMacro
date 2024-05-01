@@ -18,11 +18,11 @@ final class PublicInitializationTests: XCTestCase {
     func test_Macro_With_Struct() throws {
         #if canImport(Plugins)
         let macros = [
-            "Public": PublicInitialization.self,
+            "PublicInit": PublicInitialization.self,
         ]
         assertMacroExpansion(
             """
-            @Public
+            @PublicInit
             public struct Hoge {
                 public let index: Int
                 let text: String?

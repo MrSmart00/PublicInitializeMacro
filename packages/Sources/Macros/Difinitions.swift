@@ -6,7 +6,7 @@
 //
 
 @attached(member, names: named(init))
-public macro Public() = #externalMacro(
+public macro PublicInit() = #externalMacro(
     module: "Plugins",
     type: "PublicInitialization"
 )
