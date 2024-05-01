@@ -47,7 +47,44 @@ final class PublicInitializationTests: XCTestCase {
         )
         #endif
     }
-    
+
+    func test_Macro_With_Struct_Sendable() throws {
+        #if canImport(Plugins)
+        let macros = [
+            "PublicInit": PublicInitialization.self,
+        ]
+        assertMacroExpansion(
+            """
+            @PublicInit
+            public struct Hoge {
+                public let index: Int
+                let text: String?
+                let handler: @Sendable (String) async -> Void
+            }
+            """,
+            expandedSource:
+            """
+            public struct Hoge {
+                public let index: Int
+                let text: String?
+                let handler: @Sendable (String) async -> Void
+
+                public init(
+                    index: Int,
+                    text: String?,
+                    handler: @escaping @Sendable (String) async -> Void
+                ) {
+                    self.index = index
+                    self.text = text
+                    self.handler = handler
+                }
+            }
+            """,
+            macros: macros
+        )
+        #endif
+    }
+
     func test_Macro_With_Struct_ComputedProperty() throws {
         #if canImport(Plugins)
         let macros = [
