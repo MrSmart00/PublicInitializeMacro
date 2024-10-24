@@ -115,6 +115,10 @@ extension PublicInitialization {
             return "Float"
         } else if initializer.value.is(StringLiteralExprSyntax.self) {
             return "String"
+        } else if initializer.value.is(FunctionCallExprSyntax.self) {
+            // ex: initialize.description << "= Hoge.State()"
+            guard let type = initializer.description.split(separator: "(").first else { return "" }
+            return type.description.replacingOccurrences(of: "= ", with: "")
         }
         return ""
     }
