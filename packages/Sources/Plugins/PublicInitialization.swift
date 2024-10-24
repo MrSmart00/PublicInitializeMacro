@@ -17,7 +17,7 @@ public struct PublicInitialization: MemberMacro {
         providingMembersOf declaration: some DeclGroupSyntax,
         in context: some MacroExpansionContext
     ) throws -> [DeclSyntax] {
-        guard declaration.modifiers.first(where: { $0.name.text.contains("public") }) != nil else {
+        guard declaration.modifiers.contains(where: { $0.name.text.contains("public") }) else {
             context.diagnose(
                 .init(
                     node: declaration,
